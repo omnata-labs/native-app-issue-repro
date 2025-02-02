@@ -1,13 +1,32 @@
-## Introduction
+## Repro for bidirectional custom components not working in a native app
 
-This is the basic project template for a Snowflake Native App project. It contains minimal code meant to help you set up your first application object in your account quickly.
+This example is borrowed from here:
+https://github.com/Snowflake-Labs/snowflake-demo-streamlit/tree/main/PREVIEW%3A%20Bidirectional%20Custom%20Components
 
-### Project Structure
-| File Name | Purpose |
-| --------- | ------- |
-| README.md | The current file you are looking at, meant to guide you through a Snowflake Native App project. |
-| app/setup_script.sql | Contains SQL statements that are run when an account installs or upgrades a Snowflake Native App. |
-| app/manifest.yml | Defines properties required by the application package. Find more details at the [Manifest Documentation.](https://docs.snowflake.com/en/developer-guide/native-apps/creating-manifest)
-| app/README.md | Exposed to the account installing the Snowflake Native App with details on what it does and how to use it. |
-| snowflake.yml | Used by the Snowflake CLI tool to discover your project's code and interact with your Snowflake account with all relevant prvileges and grants. |
 
+Steps:
+
+1. Ensure snowcli is installed
+2. `cd` into `my_app/app`
+3. deploy the native app, e.g.:
+```
+snow app run --connection dev
+```
+4. Try to launch the native app
+
+Result: ![image](screenshot.png)
+
+The issue is that the streamlit URL starts like this:
+```
+https://stuzhaahra2gq6ac7iaoub.au.snowflake.app/omnata/dev/component/st_aggrid.agGrid/index.html......
+```
+
+but the custom component iframe security policy requires:
+
+```
+https://stuzhaahra2gq6ac7iaoub.au.snowflake.app/omnata/dev/_stcore/component/
+```
+
+### Dev container
+
+There is a dev container definition available for vscode users, but it mounts your local snowcli config and .ssh folder, so a little bit more effort and probably not worth it given how simple the app build/deploy is.

@@ -6,6 +6,10 @@
 -- Extension Code
 -- Refer to https://docs.snowflake.com/en/developer-guide/native-apps/creating-setup-script for a detailed understanding of this file.
 
-CREATE OR ALTER VERSIONED SCHEMA core;
+create or alter versioned schema UI;
+
+CREATE STREAMLIT if not exists UI."Administration"
+  FROM '/streamlit-custom-component'
+  MAIN_FILE = '/streamlit_app.py';
 
 -- The rest of this script is left blank for purposes of your learning and exploration.
