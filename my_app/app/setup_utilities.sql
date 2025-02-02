@@ -36,9 +36,9 @@ returns varchar
 language sql
 comment = $$
 This proc returns one of three string values:
-- 'MIGRATE_TO_HYBRID' if the account supports hybrid tables but currently the table exists as a regular table
-- 'CREATE_OR_ALTER_HYBRID' if the account supports hybrid and the table does not exist as a regular table
-- 'CREATE_OR_ALTER_REGULAR' if the account does not support hybrid tables
+- 'base_to_hybrid' if the account supports hybrid tables but currently the table exists as a regular table
+- 'hybrid' if the account supports hybrid and the table does not exist as a regular table
+- 'base' if the account does not support hybrid tables
 Note: This ignores the scenario where the hybrid table was created and now the account doesn't support hybrid tables, as this should not be possible.
 $$
 as
@@ -58,14 +58,14 @@ DECLARE
 BEGIN
   if (not(:account_supports_hybrid)) then
     -- if hybrid tables are not supported, fall back to regular
-    return 'CREATE_OR_ALTER_BASE';
+    return 'base';
   else
     OPEN tables_query USING (:database_name, :schema_name,:table_name);
     FETCH tables_query INTO :hybrid_table_count,:base_table_count;
     if (:base_table_count>0) then
-      return 'MIGRATE_TO_HYBRID';
+      return 'base_to_hybrid';
     else
-      return 'CREATE_OR_ALTER_HYBRID';
+      return 'hybrid';
     end if;
   end if;
   RAISE INVALID_TABLE_STATE;
