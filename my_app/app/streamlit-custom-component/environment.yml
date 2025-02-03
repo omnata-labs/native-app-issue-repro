@@ -2,7 +2,7 @@ name: sf_env
 channels:
   - snowflake
 dependencies:
-  - streamlit
+  - streamlit=1.39.0
   - snowflake-snowpark-python
   - simplejson
   - python-decouple
