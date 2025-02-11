@@ -1,20 +1,22 @@
-## Welcome to your First Snowflake Native App!
+## How to use this example
 
-In this Snowflake Native App, you will be able to explore some basic concepts such as application role, versioned schemas and creating procedures and functions within a setup script.
 
-For more information about a Snowflake Native App, please read the [official Snowflake documentation](https://docs.snowflake.com/en/developer-guide/native-apps/native-apps-about) which goes in depth about many additional functionalities of this framework.
-
-## Using the application after installation
-To interact with the application after it has successfully installed in your account, switch to the application owner role first.
-
-### Calling a stored procedure
-
+Deploy app:
 ```
-CALL <your_application_name>.<schema_name>.<stored_procedure_name_with_args>;
+snow app run --connection dev --project my_app
 ```
 
-### Calling a function
-
+Upload file:
 ```
-SELECT <your_application_name>.<schema_name>.<udf_with_args>;
+snow stage copy -c dev /workspaces/native-app-issue-repro/my_app/app/infor-compass-jdbc-2023.10.jar --database MY_NATIVE_APP_PROJECT_VSCODE --schema CUSTOM_PACKAGES "@PACKAGES"
+```
+
+(Optional) Show files on stage:
+```
+snow stage list-files -c dev --database MY_NATIVE_APP_PROJECT_VSCODE --schema CUSTOM_PACKAGES "@PACKAGES"
+```
+
+Call the proc:
+```
+call MY_NATIVE_APP_PROJECT_VSCODE.CORE.JAR_LOAD_TEST();
 ```
