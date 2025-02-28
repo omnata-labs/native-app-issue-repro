@@ -47,3 +47,37 @@ class JarLoader {
   }
 }
 $$;
+
+CREATE OR REPLACE FUNCTION core.JAR_LOAD_TEST_UDF(JAR_URL varchar)
+RETURNS VARCHAR
+LANGUAGE JAVA
+RUNTIME_VERSION = 11
+HANDLER = 'JarLoader.test'
+AS
+$$
+import java.sql.*;
+import java.net.URLClassLoader;
+import java.net.URL;
+import java.net.URI;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+class JarLoader {
+  public static String test(String jarUrl) throws Exception {
+    // download the jar to /tmp
+    InputStream in = new URL(jarUrl).openStream();
+    Files.copy(in, Paths.get("/tmp/infor-compass-jdbc-2023.10.jar"), StandardCopyOption.REPLACE_EXISTING);
+    URI uri = new URI("file:///tmp/infor-compass-jdbc-2023.10.jar");
+    URL url = uri.toURL();
+    URL[] urls = { url };
+    URLClassLoader classLoader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+    // Load the driver class from the JAR
+    Class<?> driverClass = Class.forName("com.infor.idl.jdbc.Driver", true, classLoader);
+    //DriverManager.registerDriver((java.sql.Driver) driverClass.getDeclaredConstructor().newInstance());
+
+    return "success";
+  }
+}
+$$;
