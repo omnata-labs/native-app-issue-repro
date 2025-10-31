@@ -4,7 +4,12 @@ The issue occurs when a native application provides access to one of its functio
 
 ### Steps
 
-1. Deploy the native application, henceforth referred to as `MY_NATIVE_APP_PROJECT_VSCODE`
+1. Deploy the native application, henceforth referred to as `MY_NATIVE_APP_PROJECT_VSCODE`.
+
+There is a dev container instance configured to mount the traditional snowcli config path (.config/snowflake) into the container, so if you have configuration there you can run the following terminal command:
+```
+snow app run -c dev -p /workspaces/native-app-issue-repro/my_app
+```
 
 2. Remove debug mode: `alter application MY_NATIVE_APP_PROJECT_VSCODE set debug_mode=false`
 
