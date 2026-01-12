@@ -1,8 +1,4 @@
-## Repro for bidirectional custom components not working in a native app
-
-This example is borrowed from here:
-https://github.com/Snowflake-Labs/snowflake-demo-streamlit/tree/main/PREVIEW%3A%20Bidirectional%20Custom%20Components
-
+## Repro for streamlit compute pool not working in a native app
 
 Steps:
 
@@ -12,20 +8,26 @@ Steps:
 ```
 snow app run --connection dev
 ```
-4. Try to launch the native app
-
-Result: ![image](screenshot.png)
-
-The issue is that the streamlit URL starts like this:
+4. Create a compute pool and assign it to the streamlit:
 ```
-https://stuzhaahra2gq6ac7iaoub.au.snowflake.app/omnata/dev/component/st_aggrid.agGrid/index.html......
-```
+CREATE COMPUTE POOL TEST_COMPUTE_POOL
+  FOR APPLICATION MY_NATIVE_APP_PROJECT_VSCODE
+  MIN_NODES = 1
+  MAX_NODES = 1
+  INSTANCE_FAMILY = CPU_X64_XS
+  AUTO_RESUME = TRUE
+  INITIALLY_SUSPENDED = TRUE
+  AUTO_SUSPEND_SECS = 600
+;
 
-but the custom component iframe security policy requires:
+alter streamlit MY_NATIVE_APP_PROJECT_VSCODE.UI.TEST
+set compute_pool=TEST_COMPUTE_POOL
+QUERY_WAREHOUSE = COMPUTE_WH
+RUNTIME_NAME = SYSTEM$ST_CONTAINER_RUNTIME_PY3_11;
 
+show compute pools like 'TEST_COMPUTE_POOL';
 ```
-https://stuzhaahra2gq6ac7iaoub.au.snowflake.app/omnata/dev/_stcore/component/
-```
+5. Try to launch the streamlit
 
 ### Dev container
 

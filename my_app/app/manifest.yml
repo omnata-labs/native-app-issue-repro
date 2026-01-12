@@ -6,6 +6,6 @@ manifest_version: 1
 
 artifacts:
   setup_script: setup_script.sql
-  default_streamlit: UI."Administration"
+  default_streamlit: UI.TEST
   extension_code: true
   readme: README.md
