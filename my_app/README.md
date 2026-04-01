@@ -3,10 +3,10 @@
 Steps:
 
 1. Ensure snowcli is installed
-2. `cd` into `my_app/app`
+2. `cd` into `home/vscode`
 3. deploy the native app, e.g.:
 ```
-snow app run --connection dev
+snow app run --connection dev -p /workspaces/native-app-issue-repro/my_app/
 ```
 4. Create a compute pool and assign it to the streamlit:
 ```
