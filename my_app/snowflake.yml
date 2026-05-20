@@ -18,5 +18,6 @@ entities:
     identifier: <% fn.concat_ids('my_native_app_project', ctx.env.suffix) %>
 
 env:
+  #suffix: SE
   suffix: <% fn.concat_ids('_', fn.sanitize_id(fn.get_username('unknown_user')) | lower) %>
 

@@ -2,10 +2,16 @@
 # This file defines properties required by the application package, including the location of the setup script and version definitions.
 # Refer to https://docs.snowflake.com/en/developer-guide/native-apps/creating-manifest for a detailed understanding of this file.
 
-manifest_version: 1
+manifest_version: 2
 
 artifacts:
   setup_script: setup_script.sql
   default_streamlit: UI.TEST
   extension_code: true
   readme: README.md
+
+privileges:
+  - CREATE EXTERNAL ACCESS INTEGRATION:
+      description: "To create external access integrations for Omnata to communicate with external services"
+  - CREATE SECURITY INTEGRATION:
+      description: "To create security integrations for OAuth"
