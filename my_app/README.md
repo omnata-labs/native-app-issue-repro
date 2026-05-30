@@ -6,7 +6,7 @@ Steps:
 2. `cd` into `my_app/app`
 3. deploy the native app, e.g.:
 ```
-snow app run --connection dev
+snow app run -p /workspaces/native-app-issue-repro/my_app --connection dev
 ```
 4. Create a compute pool and assign it to the streamlit:
 ```
