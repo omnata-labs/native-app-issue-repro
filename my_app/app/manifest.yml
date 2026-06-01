@@ -15,3 +15,5 @@ privileges:
       description: "To create external access integrations for Omnata to communicate with external services"
   - CREATE SECURITY INTEGRATION:
       description: "To create security integrations for OAuth"
+  - CREATE DATABASE:
+      description: "Create a database"
