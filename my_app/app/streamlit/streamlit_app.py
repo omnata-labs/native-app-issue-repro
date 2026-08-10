@@ -10,7 +10,7 @@ st.write(f"Streamlit version: ")
 st.write(st.__version__)
 
 session = get_active_session()
-
+st.write(st.user)
 # Example of using the session to run a SQL query and display data
 sql_text = st.text_area(label="SQL", key="sql_text")
 if sql_text:
@@ -19,4 +19,3 @@ if sql_text:
         st.write(result)
     except Exception as exception:
         st.error(exception)
-

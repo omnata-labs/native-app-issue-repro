@@ -40,3 +40,41 @@ $$;
 
 grant usage on procedure API.RUN_SQL(varchar) to application role NATIVE_APP_ROLE;
 
+create secret if not exists DATA.SECRET_TEST
+TYPE = GENERIC_STRING
+SECRET_STRING = $$$$;
+;
+
+create network rule if not exists DATA.NETWORK_RULE_TEST
+  TYPE = HOST_PORT
+  VALUE_LIST = ('api.test.com:443')
+  MODE=EGRESS;
+
+
+CREATE EXTERNAL ACCESS INTEGRATION IF NOT EXISTS EAI_TEST2
+  ALLOWED_NETWORK_RULES = (DATA.NETWORK_RULE_TEST)
+  ALLOWED_AUTHENTICATION_SECRETS = (
+      DATA.SECRET_TEST
+  )
+  ENABLED = true
+;
+
+create or replace procedure API.DO_EXTERNAL_THINGS(
+                                       CONNECTION_SLUG varchar
+                                       )
+   returns varchar
+   language python
+    RUNTIME_VERSION = '3.11'
+    PACKAGES = ('snowflake-telemetry-python','snowflake-snowpark-python')
+    EXTERNAL_ACCESS_INTEGRATIONS = (EAI_TEST2)
+    SECRETS=('SECRET_TEST' = DATA.SECRET_TEST)
+    HANDLER = 'run'
+    COMMENT = $$
+    Creates or returns the ngrok connection metadata for a connection in progress.
+    $$
+    execute as owner
+    AS
+$$
+def run(session):
+  return 'OK'
+$$;
